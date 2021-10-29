@@ -29,9 +29,46 @@ SELECT strftime('%H', sign_up_at), COUNT(*)FROM users GROUP BY 1 ORDER BY 1;
 
 -- Joining table to check 
 -- Do different schools (.edu domains) prefer different courses?
--- What courses are the New Yorkers students taking?
--- What courses are the Chicago students taking?
 
+
+SELECT users.email_domain,
+  COUNT(CASE WHEN progress.learn_cpp = 'started' OR progress.learn_cpp = 'completed' 
+  THEN users.user_id END) AS c_plus_plus,
+  COUNT(CASE WHEN progress.learn_sql = 'started' OR progress.learn_sql = 'completed' 
+  THEN users.user_id END) AS sql,
+  COUNT(CASE WHEN progress.learn_html = 'started' OR progress.learn_html = 'completed' 
+  THEN users.user_id END) AS html,
+  COUNT(CASE WHEN progress.learn_javascript = 'started' OR progress.learn_javascript = 'completed' 
+  THEN users.user_id END) AS javascript,
+  COUNT(CASE WHEN progress.learn_java = 'started' OR progress.learn_java = 'completed' 
+  THEN users.user_id END) AS java
+FROM users JOIN progress ON users.user_id = progress.user_id
+  GROUP BY 1;
+
+
+-- What courses are the New Yorkers students taking?
+SELECT 
+SUM(case when (learn_cpp = 'started' OR learn_cpp = 'completed') Then 1 else 0 end) as 'learn cpp',
+SUM(case when (learn_sql = 'started' OR learn_sql = 'completed') Then 1 else 0 end) as 'learn sql',
+SUM(case when (learn_html = 'started' OR learn_html = 'completed') Then 1 else 0 end) as 'learn html',
+SUM(case when (learn_javascript = 'started' OR learn_javascript = 'completed') Then 1 else 0 end) as 'learn javascript',
+SUM(case when (learn_java = 'started' OR learn_java = 'completed') Then 1 else 0 end) as 'learn java'
+FROM users INNER JOIN progress ON users.user_id = progress.user_id
+WHERE city = 'New York';
+
+
+-- What courses are the Chicago students taking?
+SELECT 
+SUM(case when (learn_cpp = 'started' OR learn_cpp = 'completed') Then 1 else 0 end) as 'learn cpp',
+SUM(case when (learn_sql = 'started' OR learn_sql = 'completed') Then 1 else 0 end) as 'learn sql',
+SUM(case when (learn_html = 'started' OR learn_html = 'completed') Then 1 else 0 end) as 'learn html',
+SUM(case when (learn_javascript = 'started' OR learn_javascript = 'completed') Then 1 else 0 end) as 'learn javascript',
+SUM(case when (learn_java = 'started' OR learn_java = 'completed') Then 1 else 0 end) as 'learn java'
+FROM users INNER JOIN progress ON users.user_id = progress.user_id
+WHERE city = 'Chicago';
+
+
+-- The whole table
 SELECT 
    users.user_id,
    users.email_domain,
