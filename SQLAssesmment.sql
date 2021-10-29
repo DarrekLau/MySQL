@@ -1,5 +1,8 @@
 -- 1. What are the Top 25 schools (.edu domains)?
 
+SELECT * FROM users WHERE email_domain LIKE "%.edu" LIMIT 25;
+SELECT count(*) FROM users WHERE email_domain LIKE "%.edu" AND city = "New York";
+
 SELECT email_domain, COUNT(user_id) as no_of_users
 FROM users
 GROUP BY 1
@@ -16,6 +19,9 @@ WHERE city = 'New York';
 
 -- 3. The mobile_app column contains either mobile-user or NULL. How many of these Codecademy learners are using the mobile app?
 
+
+SELECT count(*) FROM users WHERE mobile_app = "mobile-user";
+
 SELECT mobile_app, COUNT(mobile_app) as no_of_users
 FROM users;
 
@@ -27,16 +33,17 @@ SELECT sign_up_at,
    strftime('%S', sign_up_at)
 FROM users
 GROUP BY 1
-LIMIT 20;
+LIMIT 30;
 
 Calculate
-SELECT strftime('%H', sign_up_at),
-   COUNT(*)
-FROM users
+SELECT strftime('%H', sign_up_at), COUNT(*)FROM users
 GROUP BY 1
 ORDER BY 1;
 
--- Joining table
+-- Joining table to check 
+-- Do different schools (.edu domains) prefer different courses?
+-- What courses are the New Yorkers students taking?
+-- What courses are the Chicago students taking?
 
 SELECT users.user_id,
    users.email_domain,
